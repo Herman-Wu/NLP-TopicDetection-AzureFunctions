@@ -74,7 +74,8 @@ def prepare_environment():
     #logging.info("Files & Folders are {}".format(listOfFiles))
 
     # Set data path for spacy, required for running in Azure Functions
-    spacy.util.set_data_path(rootfolder)
+    # Comment out  for demo purpose
+    #spacy.util.set_data_path(rootfolder)
 
     start_time = time.time()
     logging.info("Parpare Env")
