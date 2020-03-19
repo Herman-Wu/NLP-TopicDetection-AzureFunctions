@@ -48,9 +48,9 @@ def make_bigrams(texts, bigram_mod):
     return [bigram_mod[doc] for doc in texts]
 def make_trigrams(texts,bigram_mod,trigram_mod):    
     return [trigram_mod[bigram_mod[doc]] for doc in texts]
+
 #def lemmatization(texts, allowed_postags=['NOUN', 'ADJ', 'VERB', 'ADV']):  
 #def lemmatization(texts, allowed_postags=['NOUN', 'VERB']): 
-
 def lemmatization(nlp, texts, allowed_postags=['NOUN', 'ADJ', 'VERB']):    
     texts_out = []    
     for sent in texts:        
@@ -67,13 +67,15 @@ def prepare_environment():
     logging.info("Root Folder is {}".format(rootfolder))
 
     #list uploaded files
-    mypath=rootfolder
-    listOfFiles=[]
-    for (dirpath, dirnames, filenames) in os.walk(mypath):
-        listOfFiles += [os.path.join(dirpath, file) for file in filenames]
-    logging.info("Files & Folders are {}".format(listOfFiles))
+    #mypath=rootfolder
+    #listOfFiles=[]
+    #for (dirpath, dirnames, filenames) in os.walk(mypath):
+    #    listOfFiles += [os.path.join(dirpath, file) for file in filenames]
+    #logging.info("Files & Folders are {}".format(listOfFiles))
 
+    # Set data path for spacy, required for running in Azure Functions
     spacy.util.set_data_path(rootfolder)
+
     start_time = time.time()
     logging.info("Parpare Env")
     logging.info("--- %s seconds ---" % (time.time() - start_time))
@@ -113,10 +115,16 @@ def prepare_environment():
 
     if not nlp:
         #spacy.cli.download('en_core_web_sm','--data-path /en_core_web_sm2/')
-        logging.info("Start Downlod en_core for test")
-        spacy.cli.download('en_core_web_sm')
-        logging.info("End Downlod en_core for test")
+
+        if not spacy.util.is_package("en_core_web_sm"):
+            logging.info("Start Downlod en_core for test")
+            spacy.cli.download('en_core_web_sm')
+            logging.info("End Downlod en_core for test")
+        else :
+            logging.info("en_core package already downloaded ")
+
         nlp = spacy.load("en_core_web_sm", disable=['parser', 'ner'])
+        
         #nlp = en_core_web_sm.load()
     logging.info("Loaded Spacy")
     logging.info("--- %s seconds ---" % (time.time() - start_time))

@@ -35,3 +35,18 @@ After running the functions in Azure Functions emulator, you can test it by post
 
 ```
 
+**Note:**
+
+You will need to set data path for Spacy in Azure Functions.  
+
+```python
+spacy.util.set_data_path(rootfolder)
+```
+Otherwise you will get error like following 
+
+```json
+{
+    "error": "[E050] Can't find model 'en_core_web_sm'. It doesn't seem to be a shortcut link, a Python package or a valid path to a data directory."
+}
+```
+
