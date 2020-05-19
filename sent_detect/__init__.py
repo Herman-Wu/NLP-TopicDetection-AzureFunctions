@@ -5,10 +5,10 @@ import json
 import re
 import pathlib
 
-
-from sklearn.datasets import load_files
-import pandas as pd
 import os, os.path
+import pandas as pd
+import sklearn
+from sklearn.datasets import load_files
 
 #Prepare NLP
 import spacy
@@ -67,15 +67,15 @@ def prepare_environment():
     logging.info("Root Folder is {}".format(rootfolder))
 
     #list uploaded files
-    #mypath=rootfolder
-    #listOfFiles=[]
-    #for (dirpath, dirnames, filenames) in os.walk(mypath):
-    #    listOfFiles += [os.path.join(dirpath, file) for file in filenames]
-    #logging.info("Files & Folders are {}".format(listOfFiles))
+    mypath=rootfolder
+    listOfFiles=[]
+    for (dirpath, dirnames, filenames) in os.walk(mypath):
+        listOfFiles += [os.path.join(dirpath, file) for file in filenames]
+    logging.info("Files & Folders are {}".format(listOfFiles))
 
     # Set data path for spacy, required for running in Azure Functions
     # Comment out  for demo purpose
-    #spacy.util.set_data_path(rootfolder)
+    spacy.util.set_data_path(rootfolder)
 
     start_time = time.time()
     logging.info("Parpare Env")
@@ -115,11 +115,12 @@ def prepare_environment():
     start_time = time.time()
 
     if not nlp:
-        #spacy.cli.download('en_core_web_sm','--data-path /en_core_web_sm2/')
+
 
         if not spacy.util.is_package("en_core_web_sm"):
             logging.info("Start Downlod en_core for test")
             spacy.cli.download('en_core_web_sm')
+            #spacy.cli.download('en_core_web_sm','--data-path /en_core_web_sm2/')
             logging.info("End Downlod en_core for test")
         else :
             logging.info("en_core package already downloaded ")
