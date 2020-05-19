@@ -6,6 +6,8 @@ The API is designed to be compatible with Azure Cognitive Search, so you can use
 
 Right now it works on Azure Functions emulator, we are working to have a version that can be deployed to the cloud. 
 
+[Update] It also works when deployed to Azure Functions. But you need to download/copy en_core_web_sm (it is normally located in your python environment site-packages\en_core_web_sm folder. For example in  my enronment it's in Anaconda3\Lib\site-packages\en_core_web_sm folder) first and put it in project folder or save it in Azure blob storage and [mount the storage to Azure functions](https://github.com/Azure/Azure-Functions/wiki/Bring-your-own-storage-(Linux-consumption)).   
+
 After running the functions in Azure Functions emulator, you can test it by post the following JSON message to the service. 
 
 
@@ -37,7 +39,7 @@ After running the functions in Azure Functions emulator, you can test it by post
 
 **Note:**
 
-You will need to set data path for Spacy in Azure Functions.  
+You will need to set data path (the path points to en_core_web_sm ) for Spacy in Azure Functions.  
 
 ```python
 spacy.util.set_data_path(rootfolder)
@@ -50,3 +52,7 @@ Otherwise you will get error like following
 }
 ```
 
+#### Reference
+[SpaCy model won't load in AWS Lambda](https://stackoverflow.com/questions/47879258/spacy-model-wont-load-in-aws-lambda)
+
+[Bring your own storage (Linux consumption)](https://github.com/Azure/Azure-Functions/wiki/Bring-your-own-storage-(Linux-consumption))
